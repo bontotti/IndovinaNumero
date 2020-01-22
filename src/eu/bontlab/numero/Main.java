@@ -1,5 +1,6 @@
 package eu.bontlab.numero;
 	
+import eu.bontlab.numero.model.NumeroModel;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -11,9 +12,14 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("Numero.fxml"));
+			
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("Numero.fxml"));
+			BorderPane root = (BorderPane)loader.load();
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			NumeroModel model = new NumeroModel();
+			NumeroController controller = (NumeroController)loader.getController();
+			controller.setModel(model);
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch(Exception e) {
