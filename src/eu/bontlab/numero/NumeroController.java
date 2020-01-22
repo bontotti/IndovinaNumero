@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import eu.bontlab.numero.model.NumeroModel;
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
@@ -43,7 +44,7 @@ public class NumeroController {
     	boxControlloTentativo.setDisable(false);
     	txtMessaggi.clear();
     	txtTentativo.clear();
-    	txtRimasti.setText(Integer.toString(model.getTMAX()));
+    	//txtRimasti.setText(Integer.toString(model.getTMAX()));
     	
     	//Comunico al modello di inziare una nuova partita
     	model.newGame();
@@ -66,7 +67,7 @@ public class NumeroController {
     	int risultato = model.tentativo(numeroTentato);
     	
     	if (risultato==0) {
-    		txtMessaggi.appendText("Complimenti hai indovinato in "+model.getTentativiFatti()+" tentativi!\n");
+    		txtMessaggi.appendText("Complimenti hai indovinato in "+(model.getTMAX()-model.getTentativiRimasti())+" tentativi!\n");
     		chiudiPartita();
     	} else {
 		    	if(risultato<0) {
@@ -76,7 +77,7 @@ public class NumeroController {
 		    	}
     	}
     	
-    	txtRimasti.setText(Integer.toString(model.getTMAX()-model.getTentativiFatti()));
+    	//txtRimasti.setText(Integer.toString(model.getTentativiRimasti()));
 	    	
     	if (!model.isInGioco()) {
     		if (risultato!=0) {
@@ -103,6 +104,7 @@ public class NumeroController {
     
     public void setModel(NumeroModel model) {
 		this.model = model;
+		txtRimasti.textProperty().bind(Bindings.convert(model.tentativiRimastiProperty()));
 	}
 }
 

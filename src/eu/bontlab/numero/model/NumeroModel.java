@@ -3,24 +3,27 @@ package eu.bontlab.numero.model;
 import java.security.InvalidParameterException;
 
 import eu.bontlab.numero.NumeroController;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 
 public class NumeroModel {
 
 	private final int NMAX = 100;
 	private final int TMAX = 8;	
 	private int segreto;
-	private int tentativiFatti;
+	private IntegerProperty tentativiRimasti;
 	private boolean inGioco= false;
 	
 	public NumeroModel() {
 		inGioco = false;
+		tentativiRimasti = new SimpleIntegerProperty();
 	}
 	/**
 	 * Avvia nuova partita
 	 */
 	public void newGame( ) {
 		this.inGioco = true;
-    	this.tentativiFatti= 0;
+    	this.tentativiRimasti.set(TMAX);
     	this.segreto = (int)(Math.random() *NMAX)+1;
 	}
 	
@@ -43,11 +46,11 @@ public class NumeroModel {
     	}
 		
 		//gestisci tentativo
-		this.tentativiFatti++;
+		this.tentativiRimasti.set(this.tentativiRimasti.get()-1);
 		if (numeroTentato==this.segreto) {
 			this.inGioco = false;
 			return 0;
-		} else if(this.tentativiFatti==TMAX) {
+		} else if(this.tentativiRimasti.get()==0) {
 			this.inGioco=false;
 		}
 		
@@ -67,10 +70,21 @@ public class NumeroModel {
 	public int getSegreto() {
 		return segreto;
 	}
-	public int getTentativiFatti() {
-		return tentativiFatti;
-	}
+	
 	public boolean tentativoValido(int t) {
 		if ((t<1) || (t>NMAX)) {return false;} else {return true;}
 	}
+	
+	public final IntegerProperty tentativiRimastiProperty() {
+		return this.tentativiRimasti;
+	}
+	
+	public final int getTentativiRimasti() {
+		return this.tentativiRimastiProperty().get();
+	}
+	
+	public final void setTentativiRimasti(final int tentativiRimasti) {
+		this.tentativiRimastiProperty().set(tentativiRimasti);
+	}
+	
 }
